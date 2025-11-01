@@ -1,0 +1,24 @@
+# Core dependencies for the pipeline program
+# Python 3.8+ required
+
+# No external dependencies required for local mode
+# The following are optional for future RPC/gRPC implementations:
+
+# For RPC (RPyC) implementation (optional)
+# rpyc>=5.3.0
+
+# For gRPC implementation (optional)
+# grpcio>=1.50.0
+# grpcio-tools>=1.50.0
+
+# For enhanced text processing (optional - current implementation uses basic algorithms)
+# nltk>=3.8
+# spacy>=3.4.0
+
+# For enhanced story generation (optional)
+# markovify>=0.11.2
+
+# Development/testing (optional)
+# pytest>=7.2.0
+# black>=22.0.0
+
