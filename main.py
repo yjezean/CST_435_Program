@@ -16,26 +16,45 @@ from services.service_d_aggregator import service_d
 
 def main():
     """Main entry point for the pipeline program."""
-    print("="*60)
-    print("AI Story Creator & Multi-Media Enhancement Pipeline")
-    print("="*60)
-    print("\nThis program demonstrates:")
-    print("  - Sequential pipeline processing (A → B → D)")
-    print("  - Parallel service execution (C1, C2, C3, C4)")
-    print("  - Timestamp tracking through the entire pipeline")
-    print("\nExecution Mode: LOCAL (Baseline)")
-    print("="*60 + "\n")
+    print("="*70)
+    print(" " * 10 + "AI Story Creator & Multi-Media Enhancement Pipeline")
+    print("="*70)
+    print("\n📋 PROGRAM OVERVIEW:")
+    print("   This program demonstrates a hybrid pipeline-parallel architecture:")
+    print("   • Sequential pipeline: Story Generator → Analyzer → Aggregator")
+    print("   • Parallel processing: Image, Audio, Translation, Formatting (simultaneous)")
+    print("   • Complete timestamp tracking for performance measurement")
+    print("\n🔧 EXECUTION MODE: LOCAL (Baseline for comparison)")
+    print("="*70)
+    print("\n💡 INSTRUCTIONS:")
+    print("   You can provide a story prompt in two ways:")
+    print("   1. Command line: python main.py \"Your story prompt here\"")
+    print("   2. Interactive: Just run python main.py and enter when prompted")
+    print("\n📝 EXAMPLE PROMPTS:")
+    print("   • \"A space adventure about robots\"")
+    print("   • \"A fantasy tale with dragons and wizards\"")
+    print("   • \"A modern detective story\"")
+    print("   • \"An underwater exploration\"")
+    print("="*70 + "\n")
     
     # Get user input
     if len(sys.argv) > 1:
         user_prompt = " ".join(sys.argv[1:])
+        print(f"✅ Story prompt received from command line")
+        print(f"   Prompt: '{user_prompt}'")
     else:
-        user_prompt = input("Enter a story prompt (e.g., 'A space adventure about robots'): ").strip()
+        print("📥 Please enter your story prompt:")
+        print("   (You can describe a theme, scenario, or story idea)")
+        user_prompt = input("   > ").strip()
         if not user_prompt:
             user_prompt = "A space adventure about robots"  # Default
-            print(f"Using default prompt: {user_prompt}")
+            print(f"\n   ⚠️  No prompt provided. Using default: '{user_prompt}'")
+        else:
+            print(f"\n   ✅ Prompt received: '{user_prompt}'")
     
-    print(f"\nProcessing prompt: '{user_prompt}'\n")
+    print("\n" + "="*70)
+    print("🚀 Starting pipeline execution...")
+    print("="*70 + "\n")
     
     # Create initial message
     pipeline_start = time.time()
