@@ -55,7 +55,7 @@ htmlcov/
 .ipynb_checkpoints
 
 # Environment variables
-.env
+.env*
 .env.local
 
 # Docker

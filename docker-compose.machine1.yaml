@@ -1,0 +1,102 @@
+# Docker Compose Configuration for Machine 1 (Controller)
+# Services: Main Program, Service A (Story Generator), Service B (Story Analyzer)
+# 
+# Prerequisites:
+# 1. Update MACHINE2_IP in .env.machine1 with actual IP of Machine 2
+# 2. Ensure ports 50051-50052 are open in firewall
+# 3. Machine 2 services must be running first
+#
+# Usage:
+#   gRPC mode: docker-compose -f docker-compose.machine1.yaml up -d
+#   RPC mode:  PIPELINE_MODE=rpc docker-compose -f docker-compose.machine1.yaml up -d
+
+version: '3.8'
+
+services:
+  service-a:
+    image: distributed/service-a
+    build:
+      context: .
+      dockerfile: dockerfile/Dockerfile.service-a
+    container_name: story-generator-machine1
+    network_mode: host  # Use host network to expose ports to external machines
+    environment:
+      - SERVICE_NAME=service_a
+      - SERVICE_PORT=50051
+      - HOST=0.0.0.0
+      - PORT=50051
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
+      - PYTHONPATH=/app:/app/core/grpc
+    volumes:
+      - ./services/service_a_story_generator.py:/app/services/service_a_story_generator.py
+      - ./core:/app/core
+      - ./utils:/app/utils
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; s=socket.socket(); s.connect(('127.0.0.1', 50051)); s.close()"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  service-b:
+    image: distributed/service-b
+    build:
+      context: .
+      dockerfile: dockerfile/Dockerfile.service-b
+    container_name: story-analyzer-machine1
+    network_mode: host  # Use host network to expose ports to external machines
+    environment:
+      - SERVICE_NAME=service_b
+      - SERVICE_PORT=50052
+      - HOST=0.0.0.0
+      - PORT=50052
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
+      - PYTHONPATH=/app:/app/core/grpc
+    volumes:
+      - ./services/service_b_story_analyzer.py:/app/services/service_b_story_analyzer.py
+      - ./core:/app/core
+      - ./utils:/app/utils
+    restart: unless-stopped
+    depends_on:
+      - service-a
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; s=socket.socket(); s.connect(('127.0.0.1', 50052)); s.close()"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  service-main:
+    image: distributed/service-main
+    build:
+      context: .
+      dockerfile: dockerfile/Dockerfile.main
+    container_name: main-machine1
+    network_mode: host  # Use host network to connect to services on other machines
+    environment:
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
+      - PYTHONPATH=/app:/app/core/grpc
+      # Local services on this machine
+      - SERVICE_A_HOST=127.0.0.1
+      - SERVICE_A_PORT=50051
+      - SERVICE_B_HOST=127.0.0.1
+      - SERVICE_B_PORT=50052
+      # Remote services on Machine 2 (override with actual IP)
+      - SERVICE_C_HOST=${MACHINE2_IP:-192.168.1.20}
+      - SERVICE_C_PORT=50057
+      - SERVICE_D_HOST=${MACHINE2_IP:-192.168.1.20}
+      - SERVICE_D_PORT=50058
+    volumes:
+      - ./output:/app/output
+      - ./main.py:/app/main.py
+      - ./core:/app/core
+      - ./services:/app/services
+      - ./utils:/app/utils
+    depends_on:
+      - service-a
+      - service-b
+    stdin_open: true
+    tty: true
+    command: tail -f /dev/null  # Keep container running for interactive execution
+
+# Note: No custom networks needed since using host networking
+# This allows direct communication with services on other machines

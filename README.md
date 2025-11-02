@@ -31,6 +31,8 @@ Return Complete Package
 - **Timestamp Tracking**: Complete timestamp tracking through the entire pipeline
 - **Multiple Output Formats**: Story, analysis, image concepts, audio scripts, translations, formatted outputs
 - **Performance Measurement**: Ready for comparison between local, RPC, and gRPC execution
+- **Distributed Deployment**: Run services across 2 machines with both RPC and gRPC protocols
+- **Multi-Protocol Support**: Switch between RPC and gRPC communication seamlessly
 
 ## Architecture
 
@@ -183,34 +185,67 @@ Programs/
 └── README.md
 ```
 
-## Current Implementation
+## Deployment Modes
 
-The current implementation supports two modes:
+The program supports multiple deployment modes for performance comparison:
 
-- LOCAL MODE (default): all services execute as direct function calls within the same process. This is the baseline for performance comparison.
-- RPC MODE: each service can be run as a standalone process/container exposing a simple JSON-over-TCP RPC endpoint. Services expose ports and can be wired together in Docker Compose or networked deployments.
+### 1. Local Mode (Baseline)
+All services execute as direct function calls within the same process.
 
-To run services in RPC mode, start each service process (or container). By default services read the `SERVICE_PORT` environment variable (or `RPC_PORT`/`PORT`) to decide which port to listen on. Docker Compose in this repository maps service ports by default; see `docker-compose.yaml` for the mapped port numbers.
+```bash
+python main.py "Your story prompt"
+```
 
-RPC default ports used by the repository (docker-compose overrides these with 50051-50058):
+### 2. Local Docker with gRPC/RPC
+All services run in Docker containers on one machine.
 
-- service_a: 50051
-- service_b: 50052
-- service_c (hub): 50057
-- service_c1: 50053
-- service_c2: 50054
-- service_c3: 50055
-- service_c4: 50056
-- service_d: 50058
+```bash
+# gRPC mode
+docker-compose up -d
+docker-compose exec service-main python main.py "Your story prompt"
 
-When running in Docker, the provided `docker-compose.yaml` already maps ports and sets `SERVICE_PORT` for you.
+# RPC mode
+PIPELINE_MODE=rpc docker-compose up -d
+docker-compose exec service-main python main.py "Your story prompt"
+```
 
-### Future Enhancements
+### 3. Distributed Deployment (2 Machines) ⭐ NEW
+Services distributed across two machines with both RPC and gRPC support.
 
-1. **RPC Mode**: Implement RPyC communication layer (see `docs/communication_setup.md`)
-2. **gRPC Mode**: Implement gRPC communication layer (see `docs/communication_setup.md`)
-3. **Docker Deployment**: Containerize services (see `docs/docker_deployment.md`)
-4. **Multi-Machine Deployment**: Deploy services across multiple machines
+**Quick Start:**
+```bash
+# See docs/DISTRIBUTED_QUICK_START.md for detailed instructions
+
+# Machine 2 (Worker):
+./setup_machine2.sh
+
+# Machine 1 (Controller):
+# Update .env.machine1 with Machine 2 IP first
+./setup_machine1.sh
+
+# Test connectivity:
+./test_connectivity.sh
+
+# Run pipeline:
+docker-compose -f docker-compose.machine1.yaml exec service-main python main.py "Your story"
+```
+
+For complete distributed deployment guide, see:
+- 📘 **[Distributed Quick Start](docs/DISTRIBUTED_QUICK_START.md)** - Fast setup guide
+- 📕 **[Distributed Deployment Guide](docs/distributed_deployment.md)** - Comprehensive documentation
+
+### Service Ports
+
+Default ports for all deployment modes:
+
+- **service_a**: 50051 (gRPC), 8051 (RPC)
+- **service_b**: 50052 (gRPC), 8052 (RPC)
+- **service_c1**: 50053 (gRPC), 8053 (RPC)
+- **service_c2**: 50054 (gRPC), 8054 (RPC)
+- **service_c3**: 50055 (gRPC), 8055 (RPC)
+- **service_c4**: 50056 (gRPC), 8056 (RPC)
+- **service_c (hub)**: 50057 (gRPC), 8057 (RPC)
+- **service_d**: 50058 (gRPC), 8058 (RPC)
 
 ## Timestamp Tracking
 
@@ -227,14 +262,50 @@ Timestamps propagate through the entire pipeline, allowing:
 
 ## Performance Comparison
 
-This program is designed to compare:
+This program supports comprehensive performance comparison across different deployment modes:
 
-1. **Local Execution** (current): Direct function calls (baseline)
-2. **Local with RPC**: Services communicate via RPyC on same machine
-3. **Local with gRPC**: Services communicate via gRPC on same machine
-4. **Docker Containers with RPC**: Services in containers using RPC
-5. **Docker Containers with gRPC**: Services in containers using gRPC
-6. **Multi-Machine Deployment**: Services across network (future)
+1. **Local Execution**: Direct function calls (baseline)
+2. **Local Docker with gRPC**: All containers on one machine
+3. **Local Docker with RPC**: All containers on one machine
+4. **Distributed with gRPC**: Services across 2 machines
+5. **Distributed with RPC**: Services across 2 machines
+
+### Running Performance Tests
+
+Use the included script to compare all modes:
+
+```bash
+./compare_performance.sh "A space adventure about robots"
+```
+
+This will run the pipeline in all available modes and display a comparison table.
+
+### Manual Performance Testing
+
+```bash
+# 1. Local mode
+python main.py "test story"
+
+# 2. Local Docker (gRPC)
+docker-compose up -d
+docker-compose exec service-main python main.py "test story"
+
+# 3. Local Docker (RPC)
+PIPELINE_MODE=rpc docker-compose up -d
+docker-compose exec service-main python main.py "test story"
+
+# 4. Distributed (gRPC) - After setup
+docker-compose -f docker-compose.machine1.yaml exec service-main python main.py "test story"
+
+# 5. Distributed (RPC) - After setup
+PIPELINE_MODE=rpc docker-compose -f docker-compose.machine1.yaml up -d
+docker-compose -f docker-compose.machine1.yaml exec service-main python main.py "test story"
+```
+
+Results are saved to:
+- `output/pipeline_output_local.json`
+- `output/pipeline_output_local_docker_grpc.json`
+- `output/pipeline_output_local_docker_rpc.json`
 
 ## Example Prompts
 
