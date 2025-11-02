@@ -5,6 +5,11 @@ Generates a creative story based on user prompt.
 import time
 from core.message import PipelineMessage
 from utils.story_generator import StoryGenerator
+import os
+import json
+import threading
+from core import rpc as _rpc
+from core.timestamp_tracker import TimestampTracker as _TimestampTracker
 
 
 def process_service_a(message: PipelineMessage) -> PipelineMessage:
@@ -72,4 +77,34 @@ def process_service_a(message: PipelineMessage) -> PipelineMessage:
 
 # Service function for pipeline
 service_a = process_service_a
+
+
+def _rpc_handler(params: dict) -> dict:
+    """RPC handler wrapper for this service.
+
+    Expects params to be a PipelineMessage-like dict. Returns message.to_dict().
+    """
+    pm = PipelineMessage.from_dict(params)
+    tracker = _TimestampTracker()
+    tracker.mark_received(pm, "service_a_story_generator")
+    tracker.mark_started(pm, "service_a_story_generator")
+    try:
+        result = process_service_a(pm)
+        tracker.mark_completed(result, "service_a_story_generator")
+        return result.to_dict()
+    except Exception as e:
+        tracker.mark_completed(pm, "service_a_story_generator")
+        raise
+
+
+if __name__ == "__main__":
+    # Read port from environment
+    port = int(os.environ.get("PORT", os.environ.get("RPC_PORT", os.environ.get("SERVICE_PORT", "50051"))))
+    host = os.environ.get("HOST", "0.0.0.0")
+    print(f"Starting RPC server for service_a on {host}:{port}")
+    server = _rpc.serve(_rpc_handler, host=host, port=port)
+    try:
+        threading.Event().wait()
+    except KeyboardInterrupt:
+        print("Shutting down RPC server")
 

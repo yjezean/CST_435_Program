@@ -5,6 +5,11 @@ Analyzes the generated story for sentiment, keywords, and statistics.
 import time
 from core.message import PipelineMessage
 from utils.text_analyzer import TextAnalyzer
+import os
+import json
+import threading
+from core import rpc as _rpc
+from core.timestamp_tracker import TimestampTracker as _TimestampTracker
 
 
 def process_service_b(message: PipelineMessage) -> PipelineMessage:
@@ -98,4 +103,29 @@ def process_service_b(message: PipelineMessage) -> PipelineMessage:
 
 # Service function for pipeline
 service_b = process_service_b
+
+
+def _rpc_handler(params: dict) -> dict:
+    pm = PipelineMessage.from_dict(params)
+    tracker = _TimestampTracker()
+    tracker.mark_received(pm, "service_b_story_analyzer")
+    tracker.mark_started(pm, "service_b_story_analyzer")
+    try:
+        result = process_service_b(pm)
+        tracker.mark_completed(result, "service_b_story_analyzer")
+        return result.to_dict()
+    except Exception:
+        tracker.mark_completed(pm, "service_b_story_analyzer")
+        raise
+
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", os.environ.get("RPC_PORT", os.environ.get("SERVICE_PORT", "50052"))))
+    host = os.environ.get("HOST", "0.0.0.0")
+    print(f"Starting RPC server for service_b on {host}:{port}")
+    server = _rpc.serve(_rpc_handler, host=host, port=port)
+    try:
+        threading.Event().wait()
+    except KeyboardInterrupt:
+        print("Shutting down RPC server")
 

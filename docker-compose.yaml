@@ -1,0 +1,165 @@
+services:
+  service-a:
+    build:
+      context: .
+      dockerfile: dockerfile/Dockerfile.service-a
+    container_name: story-generator
+    networks:
+      - pipeline-net
+    environment:
+      - SERVICE_NAME=service_a
+      - SERVICE_PORT=50051
+      - PIPELINE_MODE=rpc # or grpc
+    volumes:
+      - ./services/service_a_story_generator.py:/app/services/service_a_story_generator.py
+    ports:
+      - "50051:50051"
+
+  service-b:
+    build:
+      context: .
+      dockerfile: dockerfile/Dockerfile.service-b
+    container_name: story-analyzer
+    networks:
+      - pipeline-net
+    depends_on:
+      - service-a
+    environment:
+      - SERVICE_NAME=service_b
+      - SERVICE_PORT=50052
+      - PIPELINE_MODE=rpc
+    volumes:
+      - ./services/service_b_story_analyzer.py:/app/services/service_b_story_analyzer.py
+    ports:
+      - "50052:50052"
+
+  service-c1:
+    build:
+      context: .
+      dockerfile: dockerfile/Dockerfile.service-c1
+    container_name: image-concept
+    networks:
+      - pipeline-net
+    environment:
+      - SERVICE_NAME=service_c1
+      - SERVICE_PORT=50053
+      - PIPELINE_MODE=rpc
+    volumes:
+      - ./services/service_c1_image_concept.py:/app/services/service_c1_image_concept.py
+    ports:
+      - "50053:50053"
+
+  service-c2:
+    build:
+      context: .
+      dockerfile: dockerfile/Dockerfile.service-c2
+    container_name: audio-script
+    networks:
+      - pipeline-net
+    environment:
+      - SERVICE_NAME=service_c2
+      - SERVICE_PORT=50054
+      - PIPELINE_MODE=rpc
+    volumes:
+      - ./services/service_c2_audio_script.py:/app/services/service_c2_audio_script.py
+    ports:
+      - "50054:50054"
+
+  service-c3:
+    build:
+      context: .
+      dockerfile: dockerfile/Dockerfile.service-c3
+    container_name: translation
+    networks:
+      - pipeline-net
+    environment:
+      - SERVICE_NAME=service_c3
+      - SERVICE_PORT=50055
+      - PIPELINE_MODE=rpc
+    volumes:
+      - ./services/service_c3_translation.py:/app/services/service_c3_translation.py
+    ports:
+      - "50055:50055"
+
+  service-c4:
+    build:
+      context: .
+      dockerfile: dockerfile/Dockerfile.service-c4
+    container_name: formatting
+    networks:
+      - pipeline-net
+    environment:
+      - SERVICE_NAME=service_c4
+      - SERVICE_PORT=50056
+      - PIPELINE_MODE=rpc
+    volumes:
+      - ./services/service_c4_formatting.py:/app/services/service_c4_formatting.py
+    ports:
+      - "50056:50056"
+
+  service-c:
+    build:
+      context: .
+      dockerfile: dockerfile/Dockerfile.service-c
+    container_name: parallel-hub
+    networks:
+      - pipeline-net
+    depends_on:
+      - service-c1
+      - service-c2
+      - service-c3
+      - service-c4
+    environment:
+      - SERVICE_NAME=service_c
+      - SERVICE_PORT=50057
+      - C1_HOST=service-c1
+      - C2_HOST=service-c2
+      - C3_HOST=service-c3
+      - C4_HOST=service-c4
+      - PIPELINE_MODE=rpc
+    volumes:
+      - ./services/service_c_parallel_hub.py:/app/services/service_c_parallel_hub.py
+    ports:
+      - "50057:50057"
+
+  service-d:
+    build:
+      context: .
+      dockerfile: dockerfile/Dockerfile.service-d
+    container_name: aggregator
+    networks:
+      - pipeline-net
+    depends_on:
+      - service-c
+    environment:
+      - SERVICE_NAME=service_d
+      - SERVICE_PORT=50058
+      - PIPELINE_MODE=rpc
+    volumes:
+      - ./services/service_d_aggregator.py:/app/services/service_d_aggregator.py
+    ports:
+      - "50058:50058"
+
+  service-main:
+    build:
+      context: .
+      dockerfile: dockerfile/Dockerfile.main
+    container_name: main
+    networks:
+      - pipeline-net
+    depends_on:
+      - service-a
+      - service-b
+      - service-c
+      - service-d
+    environment:
+      - PIPELINE_MODE=rpc
+    volumes:
+      - ./output:/app/output
+      - ./main.py:/app/main.py
+    ports:
+      - "8080:8080"
+
+networks:
+  pipeline-net:
+    driver: bridge

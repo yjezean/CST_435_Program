@@ -5,6 +5,11 @@ Combines all results from the pipeline into a final package.
 import time
 import json
 from core.message import PipelineMessage
+import os
+import json
+import threading
+from core import rpc as _rpc
+from core.timestamp_tracker import TimestampTracker as _TimestampTracker
 
 
 def process_service_d(message: PipelineMessage) -> PipelineMessage:
@@ -140,4 +145,29 @@ def process_service_d(message: PipelineMessage) -> PipelineMessage:
 
 # Service function for pipeline
 service_d = process_service_d
+
+
+def _rpc_handler(params: dict) -> dict:
+    pm = PipelineMessage.from_dict(params)
+    tracker = _TimestampTracker()
+    tracker.mark_received(pm, "service_d_aggregator")
+    tracker.mark_started(pm, "service_d_aggregator")
+    try:
+        result = process_service_d(pm)
+        tracker.mark_completed(result, "service_d_aggregator")
+        return result.to_dict()
+    except Exception:
+        tracker.mark_completed(pm, "service_d_aggregator")
+        raise
+
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", os.environ.get("RPC_PORT", os.environ.get("SERVICE_PORT", "50058"))))
+    host = os.environ.get("HOST", "0.0.0.0")
+    print(f"Starting RPC server for service_d on {host}:{port}")
+    server = _rpc.serve(_rpc_handler, host=host, port=port)
+    try:
+        threading.Event().wait()
+    except KeyboardInterrupt:
+        print("Shutting down RPC server")
 

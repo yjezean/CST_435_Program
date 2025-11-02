@@ -185,7 +185,25 @@ Programs/
 
 ## Current Implementation
 
-The current implementation runs in **LOCAL MODE** - all services execute as direct function calls within the same process. This serves as the **baseline** for performance comparison.
+The current implementation supports two modes:
+
+- LOCAL MODE (default): all services execute as direct function calls within the same process. This is the baseline for performance comparison.
+- RPC MODE: each service can be run as a standalone process/container exposing a simple JSON-over-TCP RPC endpoint. Services expose ports and can be wired together in Docker Compose or networked deployments.
+
+To run services in RPC mode, start each service process (or container). By default services read the `SERVICE_PORT` environment variable (or `RPC_PORT`/`PORT`) to decide which port to listen on. Docker Compose in this repository maps service ports by default; see `docker-compose.yaml` for the mapped port numbers.
+
+RPC default ports used by the repository (docker-compose overrides these with 50051-50058):
+
+- service_a: 50051
+- service_b: 50052
+- service_c (hub): 50057
+- service_c1: 50053
+- service_c2: 50054
+- service_c3: 50055
+- service_c4: 50056
+- service_d: 50058
+
+When running in Docker, the provided `docker-compose.yaml` already maps ports and sets `SERVICE_PORT` for you.
 
 ### Future Enhancements
 
