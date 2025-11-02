@@ -25,18 +25,10 @@ services:
       - SERVICE_PORT=50051
       - HOST=0.0.0.0
       - PORT=50051
-      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
+      - PIPELINE_MODE=rpc
       - PYTHONPATH=/app:/app/core/grpc
     volumes:
       - ./services/service_a_story_generator.py:/app/services/service_a_story_generator.py
-      - ./core:/app/core
-      - ./utils:/app/utils
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "python", "-c", "import socket; s=socket.socket(); s.connect(('127.0.0.1', 50051)); s.close()"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
 
   service-b:
     image: distributed/service-b
@@ -50,20 +42,12 @@ services:
       - SERVICE_PORT=50052
       - HOST=0.0.0.0
       - PORT=50052
-      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
+      - PIPELINE_MODE=rpc
       - PYTHONPATH=/app:/app/core/grpc
     volumes:
       - ./services/service_b_story_analyzer.py:/app/services/service_b_story_analyzer.py
-      - ./core:/app/core
-      - ./utils:/app/utils
-    restart: unless-stopped
     depends_on:
       - service-a
-    healthcheck:
-      test: ["CMD", "python", "-c", "import socket; s=socket.socket(); s.connect(('127.0.0.1', 50052)); s.close()"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
 
   service-main:
     image: distributed/service-main
@@ -73,7 +57,7 @@ services:
     container_name: main-machine1
     network_mode: host  # Use host network to connect to services on other machines
     environment:
-      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
+      - PIPELINE_MODE=rpc
       - PYTHONPATH=/app:/app/core/grpc
       # Local services on this machine
       - SERVICE_A_HOST=127.0.0.1
@@ -81,22 +65,17 @@ services:
       - SERVICE_B_HOST=127.0.0.1
       - SERVICE_B_PORT=50052
       # Remote services on Machine 2 (override with actual IP)
-      - SERVICE_C_HOST=${MACHINE2_IP:-192.168.1.20}
+      - SERVICE_C_HOST=192.168.100.14
       - SERVICE_C_PORT=50057
-      - SERVICE_D_HOST=${MACHINE2_IP:-192.168.1.20}
+      - SERVICE_D_HOST=192.168.100.14
       - SERVICE_D_PORT=50058
     volumes:
       - ./output:/app/output
       - ./main.py:/app/main.py
-      - ./core:/app/core
-      - ./services:/app/services
-      - ./utils:/app/utils
     depends_on:
       - service-a
       - service-b
-    stdin_open: true
-    tty: true
-    command: tail -f /dev/null  # Keep container running for interactive execution
+
 
 # Note: No custom networks needed since using host networking
 # This allows direct communication with services on other machines

@@ -39,10 +39,10 @@ venv.bak/
 .DS_Store
 
 # Project specific output files
-pipeline_output*.json
+# pipeline_output*.json
 *.log
 logs/
-output/
+# output/
 
 # Testing
 .pytest_cache/

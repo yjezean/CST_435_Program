@@ -25,20 +25,12 @@ services:
       - SERVICE_PORT=50053
       - HOST=0.0.0.0
       - PORT=50053
-      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
+      - PIPELINE_MODE=grpc
       - PYTHONPATH=/app:/app/core/grpc
     volumes:
       - ./services/service_c1_image_concept.py:/app/services/service_c1_image_concept.py
-      - ./core:/app/core
-      - ./utils:/app/utils
     ports:
       - "50053:50053"
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "python", "-c", "import socket; s=socket.socket(); s.connect(('127.0.0.1', 50053)); s.close()"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
 
   service-c2:
     image: distributed/service-c2
@@ -53,20 +45,12 @@ services:
       - SERVICE_PORT=50054
       - HOST=0.0.0.0
       - PORT=50054
-      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
+      - PIPELINE_MODE=grpc
       - PYTHONPATH=/app:/app/core/grpc
     volumes:
       - ./services/service_c2_audio_script.py:/app/services/service_c2_audio_script.py
-      - ./core:/app/core
-      - ./utils:/app/utils
     ports:
       - "50054:50054"
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "python", "-c", "import socket; s=socket.socket(); s.connect(('127.0.0.1', 50054)); s.close()"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
 
   service-c3:
     image: distributed/service-c3
@@ -81,20 +65,12 @@ services:
       - SERVICE_PORT=50055
       - HOST=0.0.0.0
       - PORT=50055
-      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
+      - PIPELINE_MODE=grpc
       - PYTHONPATH=/app:/app/core/grpc
     volumes:
       - ./services/service_c3_translation.py:/app/services/service_c3_translation.py
-      - ./core:/app/core
-      - ./utils:/app/utils
     ports:
       - "50055:50055"
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "python", "-c", "import socket; s=socket.socket(); s.connect(('127.0.0.1', 50055)); s.close()"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
 
   service-c4:
     image: distributed/service-c4
@@ -109,20 +85,12 @@ services:
       - SERVICE_PORT=50056
       - HOST=0.0.0.0
       - PORT=50056
-      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
+      - PIPELINE_MODE=grpc
       - PYTHONPATH=/app:/app/core/grpc
     volumes:
       - ./services/service_c4_formatting.py:/app/services/service_c4_formatting.py
-      - ./core:/app/core
-      - ./utils:/app/utils
     ports:
       - "50056:50056"
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "python", "-c", "import socket; s=socket.socket(); s.connect(('127.0.0.1', 50056)); s.close()"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
 
   service-c:
     image: distributed/service-c
@@ -151,20 +119,12 @@ services:
       - C3_PORT=50055
       - C4_HOST=service-c4
       - C4_PORT=50056
-      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
+      - PIPELINE_MODE=grpc
       - PYTHONPATH=/app:/app/core/grpc
     volumes:
       - ./services/service_c_parallel_hub.py:/app/services/service_c_parallel_hub.py
-      - ./core:/app/core
-      - ./utils:/app/utils
     ports:
       - "50057:50057"
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "python", "-c", "import socket; s=socket.socket(); s.connect(('127.0.0.1', 50057)); s.close()"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
 
   service-d:
     image: distributed/service-d
@@ -181,20 +141,12 @@ services:
       - SERVICE_PORT=50058
       - HOST=0.0.0.0
       - PORT=50058
-      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
+      - PIPELINE_MODE=grpc
       - PYTHONPATH=/app:/app/core/grpc
     volumes:
       - ./services/service_d_aggregator.py:/app/services/service_d_aggregator.py
-      - ./core:/app/core
-      - ./utils:/app/utils
     ports:
       - "50058:50058"
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "python", "-c", "import socket; s=socket.socket(); s.connect(('127.0.0.1', 50058)); s.close()"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
 
 networks:
   pipeline-net-machine2:
