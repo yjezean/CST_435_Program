@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package pipeline;
+
+// A simplified PipelineMessage that carries complex fields as JSON strings.
+message PipelineMessage {
+  string user_input = 1;
+  string story_text = 2;
+
+  // Complex nested dictionaries serialized to JSON for flexibility
+  string analysis_json = 3;
+  string image_concept_json = 4;
+  string audio_script_json = 5;
+  string translations_json = 6;
+  string formatted_output_json = 7;
+  string metadata_json = 8;
+  string timestamps_json = 9; // optional: timestamp records
+}
+
+service PipelineService {
+  // Generic processing RPC: input message -> output message
+  rpc Process (PipelineMessage) returns (PipelineMessage) {}
+}

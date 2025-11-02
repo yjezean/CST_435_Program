@@ -9,6 +9,7 @@ import os
 import json
 import threading
 from core import rpc as _rpc
+from core import grpc_server as _grpc_server  # type: ignore
 from core.timestamp_tracker import TimestampTracker as _TimestampTracker
 
 
@@ -146,12 +147,29 @@ def _rpc_handler(params: dict) -> dict:
 
 
 if __name__ == "__main__":
+    mode = os.environ.get("PIPELINE_MODE", "rpc").lower()
     port = int(os.environ.get("PORT", os.environ.get("RPC_PORT", os.environ.get("SERVICE_PORT", "50054"))))
     host = os.environ.get("HOST", "0.0.0.0")
-    print(f"Starting RPC server for service_c2 on {host}:{port}")
-    server = _rpc.serve(_rpc_handler, host=host, port=port)
+    if mode == "grpc":
+        print(f"Starting gRPC server for service_c2 on {host}:{port}")
+        def _grpc_handler(pm: PipelineMessage) -> PipelineMessage:
+            tracker = _TimestampTracker()
+            tracker.mark_received(pm, "service_c2_audio_script")
+            tracker.mark_started(pm, "service_c2_audio_script")
+            try:
+                result = process_service_c2(pm)
+                tracker.mark_completed(result, "service_c2_audio_script")
+                return result
+            except Exception:
+                tracker.mark_completed(pm, "service_c2_audio_script")
+                raise
+
+        server = _grpc_server.serve(_grpc_handler, host=host, port=port)
+    else:
+        print(f"Starting RPC server for service_c2 on {host}:{port}")
+        server = _rpc.serve(_rpc_handler, host=host, port=port)
     try:
         threading.Event().wait()
     except KeyboardInterrupt:
-        print("Shutting down RPC server")
+        print("Shutting down server")
 

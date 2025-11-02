@@ -7,9 +7,10 @@
 # For RPC (RPyC) implementation (optional)
 # rpyc>=5.3.0
 
-# For gRPC implementation (optional)
-# grpcio>=1.50.0
-# grpcio-tools>=1.50.0
+# For gRPC implementation
+grpcio>=1.50.0
+grpcio-tools>=1.50.0
+protobuf>=4.21.0
 
 # For enhanced text processing (optional - current implementation uses basic algorithms)
 # nltk>=3.8

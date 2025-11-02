@@ -30,7 +30,9 @@ def main():
     rpc_mode = (os.environ.get("RPC_MODE", "false").lower() == "true") or (
         os.environ.get("PIPELINE_MODE", "").lower() == "rpc"
     )
-    print("\n🔧 EXECUTION MODE:", "RPC (Docker/remote services)" if rpc_mode else "LOCAL (Baseline)")
+    grpc_mode = os.environ.get("PIPELINE_MODE", "").lower() == "grpc"
+    mode_label = "gRPC (Docker/remote services)" if grpc_mode else ("RPC (Docker/remote services)" if rpc_mode else "LOCAL (Baseline)")
+    print("\n🔧 EXECUTION MODE:", mode_label)
     print("="*70)
     print("\n💡 INSTRUCTIONS:")
     print("   You can provide a story prompt in two ways:")
@@ -120,17 +122,38 @@ def main():
         _call.__name__ = f"rpc_{name}"
         return _call
 
-    if rpc_mode:
+    # Helper: build a service function that calls a remote gRPC endpoint
+    def _grpc_service(name: str, addr: str) -> Callable[[PipelineMessage], PipelineMessage]:
+        from core.grpc_client import PipelineClient
+
+        host, _, port_s = addr.partition(":")
+        port = int(port_s or "50051")
+        client = PipelineClient(host, port)
+
+        def _call(msg: PipelineMessage) -> PipelineMessage:
+            # Call remote and merge results into existing message to preserve local tracker marks
+            remote = client.process(msg)
+            return _merge_message(msg, remote)
+
+        _call.__name__ = f"grpc_{name}"
+        return _call
+
+    if grpc_mode or rpc_mode:
         # Resolve service addresses based on docker-compose defaults or env
         addr_a = _addr_for("SERVICE_A", "service-a", 50051)
         addr_b = _addr_for("SERVICE_B", "service-b", 50052)
         addr_c = _addr_for("SERVICE_C", "service-c", 50057)
         addr_d = _addr_for("SERVICE_D", "service-d", 50058)
-
-        pipeline.register_service("service_a_story_generator", _rpc_service("service_a", addr_a))
-        pipeline.register_service("service_b_story_analyzer", _rpc_service("service_b", addr_b))
-        pipeline.register_service("service_c_parallel_hub", _rpc_service("service_c", addr_c))
-        pipeline.register_service("service_d_aggregator", _rpc_service("service_d", addr_d))
+        if grpc_mode:
+            pipeline.register_service("service_a_story_generator", _grpc_service("service_a", addr_a))
+            pipeline.register_service("service_b_story_analyzer", _grpc_service("service_b", addr_b))
+            pipeline.register_service("service_c_parallel_hub", _grpc_service("service_c", addr_c))
+            pipeline.register_service("service_d_aggregator", _grpc_service("service_d", addr_d))
+        else:
+            pipeline.register_service("service_a_story_generator", _rpc_service("service_a", addr_a))
+            pipeline.register_service("service_b_story_analyzer", _rpc_service("service_b", addr_b))
+            pipeline.register_service("service_c_parallel_hub", _rpc_service("service_c", addr_c))
+            pipeline.register_service("service_d_aggregator", _rpc_service("service_d", addr_d))
     else:
         from services.service_a_story_generator import service_a
         from services.service_b_story_analyzer import service_b
@@ -207,14 +230,16 @@ def main():
         
         # Optionally save full output to JSON (resolve path relative to this file)
         base_dir = os.path.dirname(__file__)
-        if rpc_mode:
-            output_file = os.path.join(base_dir, "output", "pipeline_output_local_docker.json")
+        if grpc_mode:
+            output_file = os.path.join(base_dir, "output", "pipeline_output_local_docker_grpc.json")
+        elif rpc_mode:
+            output_file = os.path.join(base_dir, "output", "pipeline_output_local_docker_rpc.json")
         else:
             output_file = os.path.join(base_dir, "output", "pipeline_output_local.json")
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
         # Include execution mode in the saved JSON output
         output_payload = final_message.to_dict()
-        output_payload["execution_mode"] = "rpc" if rpc_mode else "local"
+        output_payload["execution_mode"] = "grpc" if grpc_mode else ("rpc" if rpc_mode else "local")
         # Also mirror into metadata for consumers that only read metadata
         final_message.metadata["execution_mode"] = output_payload["execution_mode"]
         with open(output_file, 'w', encoding='utf-8') as f:

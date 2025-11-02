@@ -13,6 +13,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy necessary modules
 COPY core/ ./core/
 COPY utils/ ./utils/
+COPY protos/ ./protos/
+
+# Generate gRPC stubs
+RUN mkdir -p core/grpc \
+    && python -m grpc_tools.protoc -I./protos --python_out=./core/grpc --grpc_python_out=./core/grpc ./protos/pipeline.proto
 
 # Expose port
 EXPOSE 50055
