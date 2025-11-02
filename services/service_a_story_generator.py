@@ -9,7 +9,6 @@ import os
 import json
 import threading
 from core import rpc as _rpc
-from core import grpc_server as _grpc_server  # type: ignore
 from core.timestamp_tracker import TimestampTracker as _TimestampTracker
 
 
@@ -104,6 +103,8 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", os.environ.get("RPC_PORT", os.environ.get("SERVICE_PORT", "50051"))))
     host = os.environ.get("HOST", "0.0.0.0")
     if mode == "grpc":
+        from core import grpc_server as _grpc_server
+
         print(f"Starting gRPC server for service_a on {host}:{port}")
         def _grpc_handler(pm: PipelineMessage) -> PipelineMessage:
             tracker = _TimestampTracker()

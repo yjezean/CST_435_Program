@@ -7,7 +7,6 @@ import concurrent.futures
 from typing import List
 from core.message import PipelineMessage
 from core.timestamp_tracker import TimestampTracker
-from core.grpc_client import PipelineClient as _GrpcClient  # type: ignore
 import os
 from core import rpc as _rpc
 import threading
@@ -153,6 +152,8 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", os.environ.get("RPC_PORT", os.environ.get("SERVICE_PORT", "50057"))))
     host = os.environ.get("HOST", "0.0.0.0")
     if mode == "grpc":
+        from core.grpc_client import PipelineClient as _GrpcClient
+        
         print(f"Starting gRPC server for service_c (parallel hub) on {host}:{port}")
         def _grpc_handler(pm: PipelineMessage) -> PipelineMessage:
             tracker = TimestampTracker()
