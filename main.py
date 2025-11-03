@@ -231,9 +231,9 @@ def main():
         # Optionally save full output to JSON (resolve path relative to this file)
         base_dir = os.path.dirname(__file__)
         if grpc_mode:
-            output_file = os.path.join(base_dir, "output", "pipeline_output_dist_grpc.json")
+            output_file = os.path.join(base_dir, "output", "pipeline_output_grpc.json")
         elif rpc_mode:
-            output_file = os.path.join(base_dir, "output", "pipeline_output_dist_rpc.json")
+            output_file = os.path.join(base_dir, "output", "pipeline_output_rpc.json")
         else:
             output_file = os.path.join(base_dir, "output", "pipeline_output_local.json")
         os.makedirs(os.path.dirname(output_file), exist_ok=True)

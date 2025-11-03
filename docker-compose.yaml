@@ -10,7 +10,7 @@ services:
     environment:
       - SERVICE_NAME=service_a
       - SERVICE_PORT=50051
-      - PIPELINE_MODE=grpc
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
       - PYTHONPATH=/app:/app/core/grpc
     volumes:
       - ./services/service_a_story_generator.py:/app/services/service_a_story_generator.py
@@ -30,7 +30,7 @@ services:
     environment:
       - SERVICE_NAME=service_b
       - SERVICE_PORT=50052
-      - PIPELINE_MODE=grpc
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
       - PYTHONPATH=/app:/app/core/grpc
     volumes:
       - ./services/service_b_story_analyzer.py:/app/services/service_b_story_analyzer.py
@@ -48,7 +48,7 @@ services:
     environment:
       - SERVICE_NAME=service_c1
       - SERVICE_PORT=50053
-      - PIPELINE_MODE=grpc
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
       - PYTHONPATH=/app:/app/core/grpc
     volumes:
       - ./services/service_c1_image_concept.py:/app/services/service_c1_image_concept.py
@@ -66,7 +66,7 @@ services:
     environment:
       - SERVICE_NAME=service_c2
       - SERVICE_PORT=50054
-      - PIPELINE_MODE=grpc
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
       - PYTHONPATH=/app:/app/core/grpc
     volumes:
       - ./services/service_c2_audio_script.py:/app/services/service_c2_audio_script.py
@@ -84,7 +84,7 @@ services:
     environment:
       - SERVICE_NAME=service_c3
       - SERVICE_PORT=50055
-      - PIPELINE_MODE=grpc
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
       - PYTHONPATH=/app:/app/core/grpc
     volumes:
       - ./services/service_c3_translation.py:/app/services/service_c3_translation.py
@@ -102,7 +102,7 @@ services:
     environment:
       - SERVICE_NAME=service_c4
       - SERVICE_PORT=50056
-      - PIPELINE_MODE=grpc
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
       - PYTHONPATH=/app:/app/core/grpc
     volumes:
       - ./services/service_c4_formatting.py:/app/services/service_c4_formatting.py
@@ -129,7 +129,7 @@ services:
       - C2_HOST=service-c2
       - C3_HOST=service-c3
       - C4_HOST=service-c4
-      - PIPELINE_MODE=grpc
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
       - PYTHONPATH=/app:/app/core/grpc
     volumes:
       - ./services/service_c_parallel_hub.py:/app/services/service_c_parallel_hub.py
@@ -149,7 +149,7 @@ services:
     environment:
       - SERVICE_NAME=service_d
       - SERVICE_PORT=50058
-      - PIPELINE_MODE=grpc
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
       - PYTHONPATH=/app:/app/core/grpc
     volumes:
       - ./services/service_d_aggregator.py:/app/services/service_d_aggregator.py
@@ -170,7 +170,7 @@ services:
       - service-c
       - service-d
     environment:
-      - PIPELINE_MODE=grpc
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
       - PYTHONPATH=/app:/app/core/grpc
     volumes:
       - ./output:/app/output
