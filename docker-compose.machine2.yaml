@@ -25,7 +25,7 @@ services:
       - SERVICE_PORT=50053
       - HOST=0.0.0.0
       - PORT=50053
-      - PIPELINE_MODE=grpc
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
       - PYTHONPATH=/app:/app/core/grpc
     volumes:
       - ./services/service_c1_image_concept.py:/app/services/service_c1_image_concept.py
@@ -45,7 +45,7 @@ services:
       - SERVICE_PORT=50054
       - HOST=0.0.0.0
       - PORT=50054
-      - PIPELINE_MODE=grpc
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
       - PYTHONPATH=/app:/app/core/grpc
     volumes:
       - ./services/service_c2_audio_script.py:/app/services/service_c2_audio_script.py
@@ -65,7 +65,7 @@ services:
       - SERVICE_PORT=50055
       - HOST=0.0.0.0
       - PORT=50055
-      - PIPELINE_MODE=grpc
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
       - PYTHONPATH=/app:/app/core/grpc
     volumes:
       - ./services/service_c3_translation.py:/app/services/service_c3_translation.py
@@ -85,7 +85,7 @@ services:
       - SERVICE_PORT=50056
       - HOST=0.0.0.0
       - PORT=50056
-      - PIPELINE_MODE=grpc
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
       - PYTHONPATH=/app:/app/core/grpc
     volumes:
       - ./services/service_c4_formatting.py:/app/services/service_c4_formatting.py
@@ -119,7 +119,7 @@ services:
       - C3_PORT=50055
       - C4_HOST=service-c4
       - C4_PORT=50056
-      - PIPELINE_MODE=grpc
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
       - PYTHONPATH=/app:/app/core/grpc
     volumes:
       - ./services/service_c_parallel_hub.py:/app/services/service_c_parallel_hub.py
@@ -141,7 +141,7 @@ services:
       - SERVICE_PORT=50058
       - HOST=0.0.0.0
       - PORT=50058
-      - PIPELINE_MODE=grpc
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
       - PYTHONPATH=/app:/app/core/grpc
     volumes:
       - ./services/service_d_aggregator.py:/app/services/service_d_aggregator.py

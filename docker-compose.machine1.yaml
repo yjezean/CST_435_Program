@@ -25,7 +25,7 @@ services:
       - SERVICE_PORT=50051
       - HOST=0.0.0.0
       - PORT=50051
-      - PIPELINE_MODE=rpc
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
       - PYTHONPATH=/app:/app/core/grpc
     volumes:
       - ./services/service_a_story_generator.py:/app/services/service_a_story_generator.py
@@ -42,7 +42,7 @@ services:
       - SERVICE_PORT=50052
       - HOST=0.0.0.0
       - PORT=50052
-      - PIPELINE_MODE=rpc
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
       - PYTHONPATH=/app:/app/core/grpc
     volumes:
       - ./services/service_b_story_analyzer.py:/app/services/service_b_story_analyzer.py
@@ -57,7 +57,7 @@ services:
     container_name: main-machine1
     network_mode: host  # Use host network to connect to services on other machines
     environment:
-      - PIPELINE_MODE=rpc
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
       - PYTHONPATH=/app:/app/core/grpc
       # Local services on this machine
       - SERVICE_A_HOST=127.0.0.1
@@ -65,9 +65,9 @@ services:
       - SERVICE_B_HOST=127.0.0.1
       - SERVICE_B_PORT=50052
       # Remote services on Machine 2 (override with actual IP)
-      - SERVICE_C_HOST=192.168.100.14
+      - SERVICE_C_HOST=192.168.100.208
       - SERVICE_C_PORT=50057
-      - SERVICE_D_HOST=192.168.100.14
+      - SERVICE_D_HOST=192.168.100.208
       - SERVICE_D_PORT=50058
     volumes:
       - ./output:/app/output
