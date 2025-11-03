@@ -72,20 +72,12 @@ class TimestampTracker:
             "service_a_story_generator",
             "service_b_story_analyzer",
             "service_c_parallel_hub",
-            "service_c1_image_concept",
-            "service_c2_audio_script",
-            "service_c3_translation",
-            "service_c4_formatting",
             "service_d_aggregator"
         ]
         
         for service_name in service_order:
             ts = message.get_timestamp(service_name)
             if ts:
-                if "parallel" in service_name:
-                    # Parallel services are handled specially
-                    continue
-                    
                 service_display_name = {
                     "service_a_story_generator": "Service A: Story Generator",
                     "service_b_story_analyzer": "Service B: Story Analyzer",
