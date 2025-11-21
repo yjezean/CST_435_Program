@@ -209,14 +209,13 @@ Timestamps propagate through the entire pipeline, allowing:
 
 ## Performance Comparison
 
-This program is designed to compare:
+This program is designed to be tested under several configurations:
 
-1. **Local Execution** (current): Direct function calls (baseline)
-2. **Local with RPC**: Services communicate via RPyC on same machine
-3. **Local with gRPC**: Services communicate via gRPC on same machine
-4. **Docker Containers with RPC**: Services in containers using RPC
-5. **Docker Containers with gRPC**: Services in containers using gRPC
-6. **Multi-Machine Deployment**: Services across network (future)
+1. **Local Execution**: Direct function calls (baseline)
+2. **Docker Containers with RPC**
+3. **Docker Containers with gRPC**
+4. **Multi-Machine with containers deployment with gRPC**
+5. **Multi-Machine with containers deployment with RPC**
 
 ## Example Prompts
 
@@ -260,11 +259,16 @@ For implementing distributed communication:
 3. Implement communication layers according to the guides
 4. Compare performance metrics across different deployment modes
 
-## License
+## Disclaimer
 
-This project is for educational purposes as part of CST435 Parallel and Cloud Computing assignment.
+This project is for educational purposes as part of Assignment 1 of CST435 Parallel and Cloud Computing. It serves as a hands-on exploration of pipeline architecture, parallel processing, communication overhead, and distributed deployment patterns.
 
-## Authors
+## Group
 
-Chong Yi Jian 
+| Members' Full Name | Matric No.  |
+|:-:|:-:|
+| CHONG YI JIAN | 164364 |
+| GO YAO XIANG | 163130 |
+| LEON THEN LEONG ONN | 163202 |
+| ZHANG YI ZHE | 155629 |
 
