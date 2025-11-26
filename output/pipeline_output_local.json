@@ -1,0 +1,235 @@
+{
+  "user_input": "A space adventure about robots",
+  "timestamps": {
+    "main_program": {
+      "service_name": "main_program",
+      "received": "2025-11-03T00:58:27.291784",
+      "received_timestamp": 1762102707.291784,
+      "started": "2025-11-03T00:58:27.291785",
+      "started_timestamp": 1762102707.2917852,
+      "completed": "2025-11-03T00:58:27.309714",
+      "completed_timestamp": 1762102707.309714,
+      "duration_ms": 17.93
+    },
+    "service_a_story_generator": {
+      "service_name": "service_a_story_generator",
+      "received": "2025-11-03T00:58:27.291798",
+      "received_timestamp": 1762102707.291798,
+      "started": "2025-11-03T00:58:27.291804",
+      "started_timestamp": 1762102707.2918036,
+      "completed": "2025-11-03T00:58:27.292355",
+      "completed_timestamp": 1762102707.2923553,
+      "duration_ms": 0.55
+    },
+    "service_b_story_analyzer": {
+      "service_name": "service_b_story_analyzer",
+      "received": "2025-11-03T00:58:27.292368",
+      "received_timestamp": 1762102707.2923682,
+      "started": "2025-11-03T00:58:27.292372",
+      "started_timestamp": 1762102707.2923715,
+      "completed": "2025-11-03T00:58:27.295726",
+      "completed_timestamp": 1762102707.2957263,
+      "duration_ms": 3.35
+    },
+    "service_c_parallel_hub": {
+      "service_name": "service_c_parallel_hub",
+      "received": "2025-11-03T00:58:27.295738",
+      "received_timestamp": 1762102707.2957375,
+      "started": "2025-11-03T00:58:27.295746",
+      "started_timestamp": 1762102707.2957463,
+      "completed": "2025-11-03T00:58:27.309099",
+      "completed_timestamp": 1762102707.3090994,
+      "duration_ms": 13.35
+    },
+    "service_c1_image_concept": {
+      "service_name": "service_c1_image_concept",
+      "received": "2025-11-03T00:58:27.303317",
+      "received_timestamp": 1762102707.3033166,
+      "started": "2025-11-03T00:58:27.303321",
+      "started_timestamp": 1762102707.3033211,
+      "completed": "2025-11-03T00:58:27.303908",
+      "completed_timestamp": 1762102707.3039079,
+      "duration_ms": 0.59
+    },
+    "service_c2_audio_script": {
+      "service_name": "service_c2_audio_script",
+      "received": "2025-11-03T00:58:27.304624",
+      "received_timestamp": 1762102707.3046243,
+      "started": "2025-11-03T00:58:27.304629",
+      "started_timestamp": 1762102707.3046293,
+      "completed": "2025-11-03T00:58:27.305082",
+      "completed_timestamp": 1762102707.3050816,
+      "duration_ms": 0.45
+    },
+    "service_c3_translation": {
+      "service_name": "service_c3_translation",
+      "received": "2025-11-03T00:58:27.305121",
+      "received_timestamp": 1762102707.3051212,
+      "started": "2025-11-03T00:58:27.305123",
+      "started_timestamp": 1762102707.3051233,
+      "completed": "2025-11-03T00:58:27.307397",
+      "completed_timestamp": 1762102707.3073967,
+      "duration_ms": 2.27
+    },
+    "service_c4_formatting": {
+      "service_name": "service_c4_formatting",
+      "received": "2025-11-03T00:58:27.308115",
+      "received_timestamp": 1762102707.3081152,
+      "started": "2025-11-03T00:58:27.308120",
+      "started_timestamp": 1762102707.3081198,
+      "completed": "2025-11-03T00:58:27.308444",
+      "completed_timestamp": 1762102707.3084445,
+      "duration_ms": 0.32
+    },
+    "service_d_aggregator": {
+      "service_name": "service_d_aggregator",
+      "received": "2025-11-03T00:58:27.309112",
+      "received_timestamp": 1762102707.3091118,
+      "started": "2025-11-03T00:58:27.309115",
+      "started_timestamp": 1762102707.3091147,
+      "completed": "2025-11-03T00:58:27.309710",
+      "completed_timestamp": 1762102707.3097098,
+      "duration_ms": 0.6
+    }
+  },
+  "story": {
+    "text": "In a distant galaxy, there was a alien who encountered nebula. During their quest, they encountered a lost civilization that would change everything.\n\nBut their journey was not without unexpected surprises. Nature itself seemed to conspire against their plans.\n\nThe story continues, but this chapter had come to a beautiful close.",
+    "word_count": 51
+  },
+  "analysis": {
+    "word_count": 51,
+    "sentence_count": 5,
+    "paragraph_count": 3,
+    "sentiment": "neutral",
+    "keywords": [
+      "their",
+      "encountered",
+      "distant",
+      "galaxy",
+      "there"
+    ],
+    "characters": [],
+    "avg_word_length": 5.29,
+    "processing_metadata": {
+      "word_frequency_analysis": 42,
+      "character_analysis_count": 25,
+      "pattern_searches_performed": 10,
+      "patterns_found": 0,
+      "sentiment_passes": 3,
+      "avg_word_length_calculated": 5.45
+    }
+  },
+  "image_concept": {
+    "scene_description": "distant planet surface",
+    "color_palette": [
+      "steel blue",
+      "ocean blue",
+      "silver"
+    ],
+    "mood": "contemplative exploration",
+    "key_elements": [
+      "their",
+      "encountered",
+      "distant"
+    ],
+    "style": "fantasy illustration",
+    "visual_elements_detected": 31,
+    "color_analysis_iterations": 15
+  },
+  "audio_script": {
+    "narration": "[EMPHASIS] In a distant galaxy, there was a alien who encountered nebula [PAUSE] [EMPHASIS] During their quest, they encountered a lost civilization that would change everything.\n\nBut their journey was not without unexpected surprises [PAUSE] [EMPHASIS] Nature itself seemed to conspire against their plans.\n\nThe story continues, but this chapter had come to a beautiful close. [PAUSE]",
+    "duration_estimate_minutes": 0.4,
+    "duration_estimate_seconds": 24,
+    "word_count": 51,
+    "tone": "neutral",
+    "emphasis_points": 3,
+    "pause_points": 3,
+    "sentence_count": 3,
+    "processing_passes": 4
+  },
+  "translations": {
+    "spanish": "In a distant galaxy, there was a alien who encontraron nebula. During their quest, they encontraron a lost civilization that would change everything.\n\nBut their journey was not without unexpected surprises. Nature itself seemed to conspire against their plans.\n\nThe historia continues, but this chapter had come to a beautiful close.",
+    "french": "In a distant galaxy, there was a alien who rencontré nebula. During their quest, they rencontré a lost civilization that would change everything.\n\nBut their journey was not without unexpected surprises. Nature itself seemed to conspire against their plans.\n\nThe histoire continues, but this chapter had come to a beautiful close."
+  },
+  "formatted_output": {
+    "markdown": "# Story: A space adventure about robots\n\nIn a distant galaxy, there was a alien who encountered nebula. During their quest, they encountered a lost civilization that would change everything.\n\nBut their journey was not without unexpected surprises. Nature itself seemed to conspire against their plans.\n\nThe story continues, but this chapter had come to a beautiful close.\n",
+    "html": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Story: A space adventure about robots</title>\n    <style>\n        body {\n            font-family: Georgia, serif;\n            max-width: 800px;\n            margin: 0 auto;\n            padding: 20px;\n            line-height: 1.6;\n        }\n        h1 {\n            color: #333;\n            border-bottom: 2px solid #333;\n            padding-bottom: 10px;\n        }\n        p {\n            margin-bottom: 15px;\n        }\n    </style>\n</head>\n<body>\n    <h1>Story: A space adventure about robots</h1>\n    <p>In a distant galaxy, there was a alien who encountered nebula. During their quest, they encountered a lost civilization that would change everything.</p>\n    <p>But their journey was not without unexpected surprises. Nature itself seemed to conspire against their plans.</p>\n    <p>The story continues, but this chapter had come to a beautiful close.</p>\n</body>\n</html>",
+    "title": "Story: A space adventure about robots",
+    "formatting_metadata": {
+      "formatting_style": "detailed",
+      "paragraph_count": 3,
+      "sentence_count": 3,
+      "markdown_validation_passes": 3,
+      "html_optimization_iterations": 5,
+      "quality_scores": {
+        "markdown": 576,
+        "html": 264
+      }
+    }
+  },
+  "metadata": {
+    "characters": [
+      "Rover",
+      "Aria"
+    ],
+    "theme": "space",
+    "generation_metadata": {
+      "variants_generated": 3,
+      "refinement_passes": 3,
+      "validation_checks": 5
+    },
+    "spanish_translation_metadata": {
+      "replacement_count": 2,
+      "untranslated_words": 48,
+      "quality_score": 1197.0,
+      "refinement_passes": 3
+    },
+    "french_translation_metadata": {
+      "replacement_count": 2,
+      "untranslated_words": 48,
+      "quality_score": 1181.0,
+      "refinement_passes": 3
+    },
+    "summary": {
+      "pipeline_complete": true,
+      "components_received": 6,
+      "total_components": 6,
+      "validation": {
+        "story_text": true,
+        "analysis": true,
+        "image_concept": true,
+        "audio_script": true,
+        "translations": true,
+        "formatted_output": true
+      },
+      "validation_details": {
+        "story_text": 51.0,
+        "analysis": 8.0,
+        "image_concept": 7.0,
+        "audio_script": 596.0,
+        "translations": 2.0,
+        "formatted_output": 4.0
+      },
+      "consistency_score": 15.0,
+      "total_data_size": 3934,
+      "validation_passes": 3,
+      "consistency_checks": 5
+    },
+    "statistics": {
+      "word_count": 51,
+      "sentence_count": 5,
+      "paragraph_count": 3,
+      "sentiment": "neutral",
+      "translation_count": 2,
+      "formats_available": [
+        "markdown",
+        "html",
+        "title",
+        "formatting_metadata"
+      ]
+    },
+    "execution_mode": "local"
+  },
+  "total_duration_ms": 17.93,
+  "execution_mode": "local"
+}

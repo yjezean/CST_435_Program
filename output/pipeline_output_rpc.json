@@ -1,0 +1,170 @@
+{
+  "user_input": "Test story",
+  "timestamps": {
+    "main_program": {
+      "service_name": "main_program",
+      "received": "2025-11-03T02:29:21.301620",
+      "received_timestamp": 1762136961.3016202,
+      "started": "2025-11-03T02:29:21.301621",
+      "started_timestamp": 1762136961.3016207,
+      "completed": "2025-11-03T02:29:21.318349",
+      "completed_timestamp": 1762136961.3183491,
+      "duration_ms": 16.73
+    },
+    "service_a_story_generator": {
+      "service_name": "service_a_story_generator",
+      "received": "2025-11-03T02:29:21.301626",
+      "received_timestamp": 1762136961.3016262,
+      "started": "2025-11-03T02:29:21.301628",
+      "started_timestamp": 1762136961.3016276,
+      "completed": "2025-11-03T02:29:21.305078",
+      "completed_timestamp": 1762136961.3050776,
+      "duration_ms": 3.45
+    },
+    "service_b_story_analyzer": {
+      "service_name": "service_b_story_analyzer",
+      "received": "2025-11-03T02:29:21.305081",
+      "received_timestamp": 1762136961.3050811,
+      "started": "2025-11-03T02:29:21.305083",
+      "started_timestamp": 1762136961.3050826,
+      "completed": "2025-11-03T02:29:21.307020",
+      "completed_timestamp": 1762136961.30702,
+      "duration_ms": 1.94
+    },
+    "service_c_parallel_hub": {
+      "service_name": "service_c_parallel_hub",
+      "received": "2025-11-03T02:29:21.307024",
+      "received_timestamp": 1762136961.3070242,
+      "started": "2025-11-03T02:29:21.307025",
+      "started_timestamp": 1762136961.3070254,
+      "completed": "2025-11-03T02:29:21.315686",
+      "completed_timestamp": 1762136961.315686,
+      "duration_ms": 8.66
+    },
+    "service_c1_image_concept": {
+      "service_name": "service_c1_image_concept",
+      "received": "2025-11-03T02:29:21.309875",
+      "received_timestamp": 1762136961.3098748,
+      "started": "2025-11-03T02:29:21.309879",
+      "started_timestamp": 1762136961.3098788,
+      "completed": "2025-11-03T02:29:21.314592",
+      "completed_timestamp": 1762136961.3145916,
+      "duration_ms": 4.71
+    },
+    "service_c2_audio_script": {
+      "service_name": "service_c2_audio_script",
+      "received": "2025-11-03T02:29:21.310706",
+      "received_timestamp": 1762136961.3107061,
+      "started": "2025-11-03T02:29:21.310711",
+      "started_timestamp": 1762136961.3107111,
+      "completed": "2025-11-03T02:29:21.313346",
+      "completed_timestamp": 1762136961.3133464,
+      "duration_ms": 2.64
+    },
+    "service_c3_translation": {
+      "service_name": "service_c3_translation",
+      "received": "2025-11-03T02:29:21.311563",
+      "received_timestamp": 1762136961.311563,
+      "started": "2025-11-03T02:29:21.311566",
+      "started_timestamp": 1762136961.3115659,
+      "completed": "2025-11-03T02:29:21.313802",
+      "completed_timestamp": 1762136961.313802,
+      "duration_ms": 2.24
+    },
+    "service_c4_formatting": {
+      "service_name": "service_c4_formatting",
+      "received": "2025-11-03T02:29:21.312499",
+      "received_timestamp": 1762136961.3124993,
+      "started": "2025-11-03T02:29:21.312502",
+      "started_timestamp": 1762136961.3125024,
+      "completed": "2025-11-03T02:29:21.314266",
+      "completed_timestamp": 1762136961.314266,
+      "duration_ms": 1.76
+    },
+    "service_d_aggregator": {
+      "service_name": "service_d_aggregator",
+      "received": "2025-11-03T02:29:21.315691",
+      "received_timestamp": 1762136961.3156915,
+      "started": "2025-11-03T02:29:21.315694",
+      "started_timestamp": 1762136961.3156939,
+      "completed": "2025-11-03T02:29:21.318346",
+      "completed_timestamp": 1762136961.318346,
+      "duration_ms": 2.65
+    }
+  },
+  "story": {
+    "text": "Deep in the heart of, there was a alien who encountered asteroid field. During their quest, they encountered a cosmic secret that would change everything.\n\nBut their journey was not without unexpected surprises. Time was running out, and decisions had to be made quickly.\n\nAnd so, their adventure became legend, inspiring future generations.",
+    "word_count": 53
+  },
+  "analysis": {
+    "word_count": 53,
+    "sentence_count": 5,
+    "paragraph_count": 3,
+    "sentiment": "positive",
+    "keywords": [
+      "their",
+      "encountered",
+      "deep",
+      "heart",
+      "there"
+    ],
+    "characters": [],
+    "avg_word_length": 5.23,
+    "processing_metadata": {
+      "word_frequency_analysis": 46,
+      "character_analysis_count": 25,
+      "pattern_searches_performed": 10,
+      "patterns_found": 0,
+      "sentiment_passes": 3,
+      "avg_word_length_calculated": 5.42
+    }
+  },
+  "metadata": {
+    "characters": [
+      "Alex",
+      "Morgan"
+    ],
+    "theme": "robots",
+    "generation_metadata": {
+      "variants_generated": 3,
+      "refinement_passes": 3,
+      "validation_checks": 5
+    },
+    "summary": {
+      "pipeline_complete": false,
+      "components_received": 2,
+      "total_components": 6,
+      "validation": {
+        "story_text": true,
+        "analysis": true,
+        "image_concept": false,
+        "audio_script": false,
+        "translations": false,
+        "formatted_output": false
+      },
+      "validation_details": {
+        "story_text": 53.0,
+        "analysis": 8.0,
+        "image_concept": 0,
+        "audio_script": 0,
+        "translations": 0,
+        "formatted_output": 0
+      },
+      "consistency_score": 10.0,
+      "total_data_size": 736,
+      "validation_passes": 3,
+      "consistency_checks": 5
+    },
+    "statistics": {
+      "word_count": 53,
+      "sentence_count": 5,
+      "paragraph_count": 3,
+      "sentiment": "positive",
+      "translation_count": 0,
+      "formats_available": []
+    },
+    "execution_mode": "rpc"
+  },
+  "total_duration_ms": 16.73,
+  "execution_mode": "rpc"
+}

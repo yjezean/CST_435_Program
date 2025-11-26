@@ -1,0 +1,153 @@
+# Docker Compose Configuration for Machine 2 (Worker/Parallel Processor)
+# Services: Service C (Hub), C1-C4 (Parallel Services), Service D (Aggregator)
+#
+# Prerequisites:
+# 1. Ensure ports 50053-50058 are open in firewall
+# 2. Start these services BEFORE Machine 1 services
+#
+# Usage:
+#   gRPC mode: docker-compose -f docker-compose.machine2.yaml up -d
+#   RPC mode:  PIPELINE_MODE=rpc docker-compose -f docker-compose.machine2.yaml up -d
+
+version: '3.8'
+
+services:
+  service-c1:
+    image: distributed/service-c1
+    build:
+      context: .
+      dockerfile: dockerfile/Dockerfile.service-c1
+    container_name: image-concept-machine2
+    networks:
+      - pipeline-net-machine2
+    environment:
+      - SERVICE_NAME=service_c1
+      - SERVICE_PORT=50053
+      - HOST=0.0.0.0
+      - PORT=50053
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
+      - PYTHONPATH=/app:/app/core/grpc
+    volumes:
+      - ./services/service_c1_image_concept.py:/app/services/service_c1_image_concept.py
+    ports:
+      - "50053:50053"
+
+  service-c2:
+    image: distributed/service-c2
+    build:
+      context: .
+      dockerfile: dockerfile/Dockerfile.service-c2
+    container_name: audio-script-machine2
+    networks:
+      - pipeline-net-machine2
+    environment:
+      - SERVICE_NAME=service_c2
+      - SERVICE_PORT=50054
+      - HOST=0.0.0.0
+      - PORT=50054
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
+      - PYTHONPATH=/app:/app/core/grpc
+    volumes:
+      - ./services/service_c2_audio_script.py:/app/services/service_c2_audio_script.py
+    ports:
+      - "50054:50054"
+
+  service-c3:
+    image: distributed/service-c3
+    build:
+      context: .
+      dockerfile: dockerfile/Dockerfile.service-c3
+    container_name: translation-machine2
+    networks:
+      - pipeline-net-machine2
+    environment:
+      - SERVICE_NAME=service_c3
+      - SERVICE_PORT=50055
+      - HOST=0.0.0.0
+      - PORT=50055
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
+      - PYTHONPATH=/app:/app/core/grpc
+    volumes:
+      - ./services/service_c3_translation.py:/app/services/service_c3_translation.py
+    ports:
+      - "50055:50055"
+
+  service-c4:
+    image: distributed/service-c4
+    build:
+      context: .
+      dockerfile: dockerfile/Dockerfile.service-c4
+    container_name: formatting-machine2
+    networks:
+      - pipeline-net-machine2
+    environment:
+      - SERVICE_NAME=service_c4
+      - SERVICE_PORT=50056
+      - HOST=0.0.0.0
+      - PORT=50056
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
+      - PYTHONPATH=/app:/app/core/grpc
+    volumes:
+      - ./services/service_c4_formatting.py:/app/services/service_c4_formatting.py
+    ports:
+      - "50056:50056"
+
+  service-c:
+    image: distributed/service-c
+    build:
+      context: .
+      dockerfile: dockerfile/Dockerfile.service-c
+    container_name: parallel-hub-machine2
+    networks:
+      - pipeline-net-machine2
+    depends_on:
+      - service-c1
+      - service-c2
+      - service-c3
+      - service-c4
+    environment:
+      - SERVICE_NAME=service_c
+      - SERVICE_PORT=50057
+      - HOST=0.0.0.0
+      - PORT=50057
+      # Internal references to parallel services
+      - C1_HOST=service-c1
+      - C1_PORT=50053
+      - C2_HOST=service-c2
+      - C2_PORT=50054
+      - C3_HOST=service-c3
+      - C3_PORT=50055
+      - C4_HOST=service-c4
+      - C4_PORT=50056
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
+      - PYTHONPATH=/app:/app/core/grpc
+    volumes:
+      - ./services/service_c_parallel_hub.py:/app/services/service_c_parallel_hub.py
+    ports:
+      - "50057:50057"
+
+  service-d:
+    image: distributed/service-d
+    build:
+      context: .
+      dockerfile: dockerfile/Dockerfile.service-d
+    container_name: aggregator-machine2
+    networks:
+      - pipeline-net-machine2
+    depends_on:
+      - service-c
+    environment:
+      - SERVICE_NAME=service_d
+      - SERVICE_PORT=50058
+      - HOST=0.0.0.0
+      - PORT=50058
+      - PIPELINE_MODE=${PIPELINE_MODE:-grpc}
+      - PYTHONPATH=/app:/app/core/grpc
+    volumes:
+      - ./services/service_d_aggregator.py:/app/services/service_d_aggregator.py
+    ports:
+      - "50058:50058"
+
+networks:
+  pipeline-net-machine2:
+    driver: bridge

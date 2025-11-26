@@ -1,17 +1,19 @@
 """
 Main program entry point for the AI Story Creator Pipeline.
-Supports local execution mode (baseline for comparison).
+
+Supports two modes of service communication:
+- Local mode (default): call Python functions directly in-process
+- RPC mode: call services A/B/C-hub/D over JSON-over-TCP (for Docker Compose)
 """
 import sys
 import json
 import time
+import os
+from typing import Callable
 from core.message import PipelineMessage
 from core.pipeline import Pipeline
 from core.timestamp_tracker import TimestampTracker
-from services.service_a_story_generator import service_a
-from services.service_b_story_analyzer import service_b
-from services.service_c_parallel_hub import service_c
-from services.service_d_aggregator import service_d
+from core import rpc as _rpc
 
 
 def main():
@@ -24,7 +26,13 @@ def main():
     print("   • Sequential pipeline: Story Generator → Analyzer → Aggregator")
     print("   • Parallel processing: Image, Audio, Translation, Formatting (simultaneous)")
     print("   • Complete timestamp tracking for performance measurement")
-    print("\n🔧 EXECUTION MODE: LOCAL (Baseline for comparison)")
+    # Determine execution mode
+    rpc_mode = (os.environ.get("RPC_MODE", "false").lower() == "true") or (
+        os.environ.get("PIPELINE_MODE", "").lower() == "rpc"
+    )
+    grpc_mode = os.environ.get("PIPELINE_MODE", "").lower() == "grpc"
+    mode_label = "gRPC (Docker/remote services)" if grpc_mode else ("RPC (Docker/remote services)" if rpc_mode else "LOCAL (Baseline)")
+    print("\n🔧 EXECUTION MODE:", mode_label)
     print("="*70)
     print("\n💡 INSTRUCTIONS:")
     print("   You can provide a story prompt in two ways:")
@@ -63,11 +71,100 @@ def main():
     # Create pipeline
     pipeline = Pipeline()
     
-    # Register services
-    pipeline.register_service("service_a_story_generator", service_a)
-    pipeline.register_service("service_b_story_analyzer", service_b)
-    pipeline.register_service("service_c_parallel_hub", service_c)
-    pipeline.register_service("service_d_aggregator", service_d)
+    # Helper: resolve host:port from env with sensible defaults
+    def _addr_for(prefix: str, default_host: str, default_port: int) -> str:
+        # Allow SERVICE_X_ADDR to override everything
+        addr = os.environ.get(f"{prefix}_ADDR")
+        if addr:
+            return addr
+        host = os.environ.get(f"{prefix}_HOST") or default_host
+        port = (
+            os.environ.get(f"{prefix}_PORT")
+            or os.environ.get("SERVICE_PORT")
+            or str(default_port)
+        )
+        return f"{host}:{port}"
+
+    # Helper: merge results from src into dst PipelineMessage (preserve existing timestamps)
+    def _merge_message(dst: PipelineMessage, src: PipelineMessage) -> PipelineMessage:
+        if src.story_text is not None:
+            dst.story_text = src.story_text
+        if src.analysis is not None:
+            dst.analysis = src.analysis
+        if src.image_concept is not None:
+            dst.image_concept = src.image_concept
+        if src.audio_script is not None:
+            dst.audio_script = src.audio_script
+        if src.translations is not None:
+            dst.translations = src.translations
+        if src.formatted_output is not None:
+            dst.formatted_output = src.formatted_output
+        # Merge metadata (shallow)
+        if src.metadata:
+            dst.metadata.update(src.metadata)
+        # Merge timestamps without clobbering existing
+        for name, ts in src.timestamps.items():
+            if name not in dst.timestamps:
+                dst.timestamps[name] = ts
+        return dst
+
+    # Helper: build a service function that calls a remote RPC endpoint
+    def _rpc_service(name: str, addr: str) -> Callable[[PipelineMessage], PipelineMessage]:
+        host, _, port_s = addr.partition(":")
+        port = int(port_s or "8000")
+
+        def _call(msg: PipelineMessage) -> PipelineMessage:
+            # Call remote and merge results into existing message to preserve local tracker marks
+            resp = _rpc.rpc_call(host, port, msg.to_dict())
+            remote = PipelineMessage.from_dict(resp)
+            return _merge_message(msg, remote)
+
+        _call.__name__ = f"rpc_{name}"
+        return _call
+
+    # Helper: build a service function that calls a remote gRPC endpoint
+    def _grpc_service(name: str, addr: str) -> Callable[[PipelineMessage], PipelineMessage]:
+        from core.grpc_client import PipelineClient
+
+        host, _, port_s = addr.partition(":")
+        port = int(port_s or "50051")
+        client = PipelineClient(host, port)
+
+        def _call(msg: PipelineMessage) -> PipelineMessage:
+            # Call remote and merge results into existing message to preserve local tracker marks
+            remote = client.process(msg)
+            return _merge_message(msg, remote)
+
+        _call.__name__ = f"grpc_{name}"
+        return _call
+
+    if grpc_mode or rpc_mode:
+        # Resolve service addresses based on docker-compose defaults or env
+        addr_a = _addr_for("SERVICE_A", "service-a", 50051)
+        addr_b = _addr_for("SERVICE_B", "service-b", 50052)
+        addr_c = _addr_for("SERVICE_C", "service-c", 50057)
+        addr_d = _addr_for("SERVICE_D", "service-d", 50058)
+        if grpc_mode:
+            pipeline.register_service("service_a_story_generator", _grpc_service("service_a", addr_a))
+            pipeline.register_service("service_b_story_analyzer", _grpc_service("service_b", addr_b))
+            pipeline.register_service("service_c_parallel_hub", _grpc_service("service_c", addr_c))
+            pipeline.register_service("service_d_aggregator", _grpc_service("service_d", addr_d))
+        else:
+            pipeline.register_service("service_a_story_generator", _rpc_service("service_a", addr_a))
+            pipeline.register_service("service_b_story_analyzer", _rpc_service("service_b", addr_b))
+            pipeline.register_service("service_c_parallel_hub", _rpc_service("service_c", addr_c))
+            pipeline.register_service("service_d_aggregator", _rpc_service("service_d", addr_d))
+    else:
+        from services.service_a_story_generator import service_a
+        from services.service_b_story_analyzer import service_b
+        from services.service_c_parallel_hub import service_c
+        from services.service_d_aggregator import service_d
+
+        # Local in-process services
+        pipeline.register_service("service_a_story_generator", service_a)
+        pipeline.register_service("service_b_story_analyzer", service_b)
+        pipeline.register_service("service_c_parallel_hub", service_c)
+        pipeline.register_service("service_d_aggregator", service_d)
     
     # Define service chain
     service_chain = [
@@ -131,10 +228,22 @@ def main():
             for fmt in final_message.formatted_output.keys():
                 print(f"  - {fmt.upper()}")
         
-        # Optionally save full output to JSON
-        output_file = "pipeline_output.json"
+        # Optionally save full output to JSON (resolve path relative to this file)
+        base_dir = os.path.dirname(__file__)
+        if grpc_mode:
+            output_file = os.path.join(base_dir, "output", "pipeline_output_grpc.json")
+        elif rpc_mode:
+            output_file = os.path.join(base_dir, "output", "pipeline_output_rpc.json")
+        else:
+            output_file = os.path.join(base_dir, "output", "pipeline_output_local.json")
+        os.makedirs(os.path.dirname(output_file), exist_ok=True)
+        # Include execution mode in the saved JSON output
+        output_payload = final_message.to_dict()
+        output_payload["execution_mode"] = "grpc" if grpc_mode else ("rpc" if rpc_mode else "local")
+        # Also mirror into metadata for consumers that only read metadata
+        final_message.metadata["execution_mode"] = output_payload["execution_mode"]
         with open(output_file, 'w', encoding='utf-8') as f:
-            json.dump(final_message.to_dict(), f, indent=2, ensure_ascii=False)
+            json.dump(output_payload, f, indent=2, ensure_ascii=False)
         print(f"\n💾 Full output saved to: {output_file}")
         
         print("\n" + "="*60)

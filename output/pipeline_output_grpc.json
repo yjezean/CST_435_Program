@@ -1,0 +1,170 @@
+{
+  "user_input": "Test story",
+  "timestamps": {
+    "main_program": {
+      "service_name": "main_program",
+      "received": "2025-11-03T02:32:26.418431",
+      "received_timestamp": 1762137146.418431,
+      "started": "2025-11-03T02:32:26.418432",
+      "started_timestamp": 1762137146.4184318,
+      "completed": "2025-11-03T02:32:26.443257",
+      "completed_timestamp": 1762137146.443257,
+      "duration_ms": 24.83
+    },
+    "service_a_story_generator": {
+      "service_name": "service_a_story_generator",
+      "received": "2025-11-03T02:32:26.418441",
+      "received_timestamp": 1762137146.418441,
+      "started": "2025-11-03T02:32:26.418442",
+      "started_timestamp": 1762137146.4184422,
+      "completed": "2025-11-03T02:32:26.423614",
+      "completed_timestamp": 1762137146.423614,
+      "duration_ms": 5.17
+    },
+    "service_b_story_analyzer": {
+      "service_name": "service_b_story_analyzer",
+      "received": "2025-11-03T02:32:26.423619",
+      "received_timestamp": 1762137146.4236193,
+      "started": "2025-11-03T02:32:26.423621",
+      "started_timestamp": 1762137146.4236214,
+      "completed": "2025-11-03T02:32:26.428194",
+      "completed_timestamp": 1762137146.4281936,
+      "duration_ms": 4.57
+    },
+    "service_c_parallel_hub": {
+      "service_name": "service_c_parallel_hub",
+      "received": "2025-11-03T02:32:26.428197",
+      "received_timestamp": 1762137146.4281974,
+      "started": "2025-11-03T02:32:26.428199",
+      "started_timestamp": 1762137146.4281988,
+      "completed": "2025-11-03T02:32:26.439408",
+      "completed_timestamp": 1762137146.439408,
+      "duration_ms": 11.21
+    },
+    "service_c1_image_concept": {
+      "service_name": "service_c1_image_concept",
+      "received": "2025-11-03T02:32:26.434184",
+      "received_timestamp": 1762137146.4341836,
+      "started": "2025-11-03T02:32:26.434186",
+      "started_timestamp": 1762137146.434186,
+      "completed": "2025-11-03T02:32:26.436523",
+      "completed_timestamp": 1762137146.4365232,
+      "duration_ms": 2.34
+    },
+    "service_c2_audio_script": {
+      "service_name": "service_c2_audio_script",
+      "received": "2025-11-03T02:32:26.434903",
+      "received_timestamp": 1762137146.4349034,
+      "started": "2025-11-03T02:32:26.434905",
+      "started_timestamp": 1762137146.434905,
+      "completed": "2025-11-03T02:32:26.437195",
+      "completed_timestamp": 1762137146.437195,
+      "duration_ms": 2.29
+    },
+    "service_c3_translation": {
+      "service_name": "service_c3_translation",
+      "received": "2025-11-03T02:32:26.435491",
+      "received_timestamp": 1762137146.4354906,
+      "started": "2025-11-03T02:32:26.435493",
+      "started_timestamp": 1762137146.4354925,
+      "completed": "2025-11-03T02:32:26.437574",
+      "completed_timestamp": 1762137146.437574,
+      "duration_ms": 2.08
+    },
+    "service_c4_formatting": {
+      "service_name": "service_c4_formatting",
+      "received": "2025-11-03T02:32:26.436630",
+      "received_timestamp": 1762137146.4366298,
+      "started": "2025-11-03T02:32:26.436632",
+      "started_timestamp": 1762137146.4366322,
+      "completed": "2025-11-03T02:32:26.438214",
+      "completed_timestamp": 1762137146.4382138,
+      "duration_ms": 1.58
+    },
+    "service_d_aggregator": {
+      "service_name": "service_d_aggregator",
+      "received": "2025-11-03T02:32:26.439412",
+      "received_timestamp": 1762137146.4394116,
+      "started": "2025-11-03T02:32:26.439413",
+      "started_timestamp": 1762137146.4394133,
+      "completed": "2025-11-03T02:32:26.443255",
+      "completed_timestamp": 1762137146.4432552,
+      "duration_ms": 3.84
+    }
+  },
+  "story": {
+    "text": "Long ago, in the realm of, there was a cyborg who worked alongside cyber world. During their quest, they worked alongside a creative solution that would change everything.\n\nYet, what they found was far more remarkable than expected. Nature itself seemed to conspire against their plans.\n\nThe story continues, but this chapter had come to a beautiful close.",
+    "word_count": 58
+  },
+  "analysis": {
+    "word_count": 58,
+    "sentence_count": 5,
+    "paragraph_count": 3,
+    "sentiment": "positive",
+    "keywords": [
+      "worked",
+      "alongside",
+      "their",
+      "they",
+      "long"
+    ],
+    "characters": [],
+    "avg_word_length": 4.95,
+    "processing_metadata": {
+      "word_frequency_analysis": 49,
+      "character_analysis_count": 24,
+      "pattern_searches_performed": 10,
+      "patterns_found": 0,
+      "sentiment_passes": 3,
+      "avg_word_length_calculated": 5.12
+    }
+  },
+  "metadata": {
+    "characters": [
+      "Alex",
+      "Morgan"
+    ],
+    "theme": "modern",
+    "generation_metadata": {
+      "variants_generated": 3,
+      "refinement_passes": 3,
+      "validation_checks": 5
+    },
+    "summary": {
+      "pipeline_complete": false,
+      "components_received": 2,
+      "total_components": 6,
+      "validation": {
+        "story_text": true,
+        "analysis": true,
+        "image_concept": false,
+        "audio_script": false,
+        "translations": false,
+        "formatted_output": false
+      },
+      "validation_details": {
+        "story_text": 58.0,
+        "analysis": 8.0,
+        "image_concept": 0,
+        "audio_script": 0,
+        "translations": 0,
+        "formatted_output": 0
+      },
+      "consistency_score": 10.0,
+      "total_data_size": 749,
+      "validation_passes": 3,
+      "consistency_checks": 5
+    },
+    "statistics": {
+      "word_count": 58,
+      "sentence_count": 5,
+      "paragraph_count": 3,
+      "sentiment": "positive",
+      "translation_count": 0,
+      "formats_available": []
+    },
+    "execution_mode": "grpc"
+  },
+  "total_duration_ms": 24.83,
+  "execution_mode": "grpc"
+}

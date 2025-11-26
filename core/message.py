@@ -114,3 +114,36 @@ class PipelineMessage:
                 
         return result
 
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "PipelineMessage":
+        """Reconstruct a PipelineMessage from a dict (the inverse of to_dict).
+
+        This will preserve timestamps and nested fields where available.
+        """
+        pm = cls(user_input=data.get("user_input", ""))
+        pm.story_text = data.get("story_text") or data.get("story") and data.get("story").get("text")
+        pm.analysis = data.get("analysis")
+        pm.image_concept = data.get("image_concept")
+        pm.audio_script = data.get("audio_script")
+        pm.translations = data.get("translations")
+        pm.formatted_output = data.get("formatted_output")
+        pm.metadata = data.get("metadata", {}) or {}
+
+        # Reconstruct timestamps if present
+        ts_data = data.get("timestamps") or {}
+        for name, tdict in ts_data.items():
+            try:
+                received = tdict.get("received_timestamp")
+                started = tdict.get("started_timestamp")
+                completed = tdict.get("completed_timestamp")
+                tr = TimestampRecord(service_name=name,
+                                     received_time=received,
+                                     start_time=started,
+                                     end_time=completed)
+                pm.timestamps[name] = tr
+            except Exception:
+                # Ignore malformed timestamp entries
+                continue
+
+        return pm
+

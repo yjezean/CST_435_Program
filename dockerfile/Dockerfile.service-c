@@ -1,0 +1,26 @@
+FROM python:3.9-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy necessary modules
+COPY core/ ./core/
+COPY utils/ ./utils/
+COPY protos/ ./protos/
+
+# Generate gRPC stubs
+RUN mkdir -p core/grpc \
+    && python -m grpc_tools.protoc -I./protos --python_out=./core/grpc --grpc_python_out=./core/grpc ./protos/pipeline.proto
+
+# Expose port
+EXPOSE 50057
+
+# Run service (will be implemented for RPC/gRPC)
+CMD ["python3", "-m", "services.service_c_parallel_hub"]

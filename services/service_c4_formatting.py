@@ -5,6 +5,11 @@ Formats the story into various output formats (Markdown, HTML).
 import time
 from core.message import PipelineMessage
 from utils.output_formatter import OutputFormatter
+import os
+import json
+import threading
+from core import rpc as _rpc
+from core.timestamp_tracker import TimestampTracker as _TimestampTracker
 
 
 def process_service_c4(message: PipelineMessage) -> PipelineMessage:
@@ -92,4 +97,48 @@ def process_service_c4(message: PipelineMessage) -> PipelineMessage:
 
 # Service function for pipeline
 service_c4 = process_service_c4
+
+
+def _rpc_handler(params: dict) -> dict:
+    pm = PipelineMessage.from_dict(params)
+    tracker = _TimestampTracker()
+    tracker.mark_received(pm, "service_c4_formatting")
+    tracker.mark_started(pm, "service_c4_formatting")
+    try:
+        result = process_service_c4(pm)
+        tracker.mark_completed(result, "service_c4_formatting")
+        return result.to_dict()
+    except Exception:
+        tracker.mark_completed(pm, "service_c4_formatting")
+        raise
+
+
+if __name__ == "__main__":
+    mode = os.environ.get("PIPELINE_MODE", "rpc").lower()
+    port = int(os.environ.get("PORT", os.environ.get("RPC_PORT", os.environ.get("SERVICE_PORT", "50056"))))
+    host = os.environ.get("HOST", "0.0.0.0")
+    if mode == "grpc":
+        from core import grpc_server as _grpc_server
+        
+        print(f"Starting gRPC server for service_c4 on {host}:{port}")
+        def _grpc_handler(pm: PipelineMessage) -> PipelineMessage:
+            tracker = _TimestampTracker()
+            tracker.mark_received(pm, "service_c4_formatting")
+            tracker.mark_started(pm, "service_c4_formatting")
+            try:
+                result = process_service_c4(pm)
+                tracker.mark_completed(result, "service_c4_formatting")
+                return result
+            except Exception:
+                tracker.mark_completed(pm, "service_c4_formatting")
+                raise
+
+        server = _grpc_server.serve(_grpc_handler, host=host, port=port)
+    else:
+        print(f"Starting RPC server for service_c4 on {host}:{port}")
+        server = _rpc.serve(_rpc_handler, host=host, port=port)
+    try:
+        threading.Event().wait()
+    except KeyboardInterrupt:
+        print("Shutting down server")
 

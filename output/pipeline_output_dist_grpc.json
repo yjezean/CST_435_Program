@@ -1,0 +1,170 @@
+{
+  "user_input": "A space adventure about robots",
+  "timestamps": {
+    "main_program": {
+      "service_name": "main_program",
+      "received": "2025-11-02T18:12:26.663452",
+      "received_timestamp": 1762107146.6634521,
+      "started": "2025-11-02T18:12:26.663454",
+      "started_timestamp": 1762107146.6634536,
+      "completed": "2025-11-02T18:12:26.703536",
+      "completed_timestamp": 1762107146.7035363,
+      "duration_ms": 40.08
+    },
+    "service_a_story_generator": {
+      "service_name": "service_a_story_generator",
+      "received": "2025-11-02T18:12:26.663468",
+      "received_timestamp": 1762107146.663468,
+      "started": "2025-11-02T18:12:26.663472",
+      "started_timestamp": 1762107146.6634717,
+      "completed": "2025-11-02T18:12:26.672690",
+      "completed_timestamp": 1762107146.6726904,
+      "duration_ms": 9.22
+    },
+    "service_b_story_analyzer": {
+      "service_name": "service_b_story_analyzer",
+      "received": "2025-11-02T18:12:26.672701",
+      "received_timestamp": 1762107146.6727011,
+      "started": "2025-11-02T18:12:26.672705",
+      "started_timestamp": 1762107146.6727052,
+      "completed": "2025-11-02T18:12:26.682715",
+      "completed_timestamp": 1762107146.6827152,
+      "duration_ms": 10.01
+    },
+    "service_c_parallel_hub": {
+      "service_name": "service_c_parallel_hub",
+      "received": "2025-11-02T18:12:26.682725",
+      "received_timestamp": 1762107146.6827252,
+      "started": "2025-11-02T18:12:26.682729",
+      "started_timestamp": 1762107146.6827292,
+      "completed": "2025-11-02T18:12:26.695713",
+      "completed_timestamp": 1762107146.6957128,
+      "duration_ms": 12.98
+    },
+    "service_c1_image_concept": {
+      "service_name": "service_c1_image_concept",
+      "received": "2025-11-02T18:12:27.180678",
+      "received_timestamp": 1762107147.1806784,
+      "started": "2025-11-02T18:12:27.180680",
+      "started_timestamp": 1762107147.1806798,
+      "completed": "2025-11-02T18:12:27.183587",
+      "completed_timestamp": 1762107147.1835866,
+      "duration_ms": 2.91
+    },
+    "service_c2_audio_script": {
+      "service_name": "service_c2_audio_script",
+      "received": "2025-11-02T18:12:27.181260",
+      "received_timestamp": 1762107147.1812603,
+      "started": "2025-11-02T18:12:27.181262",
+      "started_timestamp": 1762107147.1812615,
+      "completed": "2025-11-02T18:12:27.183309",
+      "completed_timestamp": 1762107147.1833086,
+      "duration_ms": 2.05
+    },
+    "service_c3_translation": {
+      "service_name": "service_c3_translation",
+      "received": "2025-11-02T18:12:27.181866",
+      "received_timestamp": 1762107147.1818662,
+      "started": "2025-11-02T18:12:27.181869",
+      "started_timestamp": 1762107147.1818693,
+      "completed": "2025-11-02T18:12:27.183883",
+      "completed_timestamp": 1762107147.1838834,
+      "duration_ms": 2.01
+    },
+    "service_c4_formatting": {
+      "service_name": "service_c4_formatting",
+      "received": "2025-11-02T18:12:27.182782",
+      "received_timestamp": 1762107147.182782,
+      "started": "2025-11-02T18:12:27.182784",
+      "started_timestamp": 1762107147.1827843,
+      "completed": "2025-11-02T18:12:27.184127",
+      "completed_timestamp": 1762107147.1841273,
+      "duration_ms": 1.34
+    },
+    "service_d_aggregator": {
+      "service_name": "service_d_aggregator",
+      "received": "2025-11-02T18:12:26.695723",
+      "received_timestamp": 1762107146.6957233,
+      "started": "2025-11-02T18:12:26.695728",
+      "started_timestamp": 1762107146.6957276,
+      "completed": "2025-11-02T18:12:26.703532",
+      "completed_timestamp": 1762107146.7035317,
+      "duration_ms": 7.8
+    }
+  },
+  "story": {
+    "text": "Long ago, in the realm of, there was a cosmic engineer who investigated space station. During their quest, they investigated a cosmic secret that would change everything.\n\nSuddenly, they realized the true nature of their quest. Nature itself seemed to conspire against their plans.\n\nThe memory of this journey would stay with them forever.",
+    "word_count": 54
+  },
+  "analysis": {
+    "word_count": 54,
+    "sentence_count": 5,
+    "paragraph_count": 3,
+    "sentiment": "neutral",
+    "keywords": [
+      "their",
+      "cosmic",
+      "investigated",
+      "quest",
+      "they"
+    ],
+    "characters": [],
+    "avg_word_length": 5.09,
+    "processing_metadata": {
+      "word_frequency_analysis": 41,
+      "character_analysis_count": 23,
+      "pattern_searches_performed": 10,
+      "patterns_found": 0,
+      "sentiment_passes": 3,
+      "avg_word_length_calculated": 5.26
+    }
+  },
+  "metadata": {
+    "characters": [
+      "Rover",
+      "Aria"
+    ],
+    "theme": "space",
+    "generation_metadata": {
+      "variants_generated": 3,
+      "refinement_passes": 3,
+      "validation_checks": 5
+    },
+    "summary": {
+      "pipeline_complete": false,
+      "components_received": 2,
+      "total_components": 6,
+      "validation": {
+        "story_text": true,
+        "analysis": true,
+        "image_concept": false,
+        "audio_script": false,
+        "translations": false,
+        "formatted_output": false
+      },
+      "validation_details": {
+        "story_text": 54.0,
+        "analysis": 8.0,
+        "image_concept": 0,
+        "audio_script": 0,
+        "translations": 0,
+        "formatted_output": 0
+      },
+      "consistency_score": 10.0,
+      "total_data_size": 735,
+      "validation_passes": 3,
+      "consistency_checks": 5
+    },
+    "statistics": {
+      "word_count": 54,
+      "sentence_count": 5,
+      "paragraph_count": 3,
+      "sentiment": "neutral",
+      "translation_count": 0,
+      "formats_available": []
+    },
+    "execution_mode": "grpc"
+  },
+  "total_duration_ms": 520.67,
+  "execution_mode": "grpc"
+}
